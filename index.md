@@ -25,6 +25,8 @@ The resulting BibTeX code is written to `stdout`, error messages are written to 
 
 # Installation
 
-You will need to install [`arxiv2bib`](https://github.com/nathangrigg/arxiv2bib) and [`mr2bib`](https://github.com/bibgetter/mr2bib). For `arxiv2bib` this is [explained in their documentation](https://github.com/nathangrigg/arxiv2bib#installation). For `mr2bib` there is no installation at the moment.
+You will need to install [`arxiv2bib`](https://github.com/nathangrigg/arxiv2bib) and [`mr2bib`](https://github.com/bibgetter/mr2bib) first. For `arxiv2bib` this is [explained in their documentation](https://github.com/nathangrigg/arxiv2bib#installation).
 
-Also, for `bibgetter` there is no installation at the moment. Just put the Python files from `mr2bib` and `bibgetter` somewhere Python can find them, for the time being.
+To install `mr2bib`, clone the repository and run `python setup.py install`.
+
+Then to install `bibgetter`, clone this repository and run `python setup.py install`.
