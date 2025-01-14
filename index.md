@@ -4,29 +4,66 @@ layout: default
 
 # Introduction
 
-The following is a Python script which will parse your `.aux` files looking for the auto-generated code that corresponds to a `\cite` command in your LaTeX. It will look for those keys which resemble either an arXiv identifier, or a MathSciNet identifier.
+`bibgetter` is a tool for mathematicians writing papers in LaTeX,
+making bibliography management easier.
 
-It will then use
+## Installation
 
-* [`arxiv2bib`](https://github.com/nathangrigg/arxiv2bib)
-* [`mr2bib`](https://github.com/bibgetter/mr2bib)
+It is best to install it using `pipx`, which is a clean way to install Python applications.
 
-to fetch the corresponding BibTeX entries.
+As an end user, the best solution is likely to run
 
-# Examples
+`pipx install git+https://github.com/bibgetter/bibgetter`
 
-There is only one way of using the script, namely by calling
+As a developer (so this is a reminder to myself, mostly), it is
 
-    bibgetter file.aux
+`pipx install --editable --force .`
 
-where `file.aux` is the auxiliary file created by LaTeX to communicate with `bibtex` or `biber`, and which will contain the information corresponding to the `\cite` commands in your LaTeX file. It is possible to pass multiple files.
+## Workflow
 
-The resulting BibTeX code is written to `stdout`, error messages are written to `stderr`.
+There is a central BibLaTeX file, located at `~/.bibgetter/bibliography.bib` which acts as
+a central repository for bibliography entries.
 
-# Installation
+### Adding entries
 
-You will need to install [`arxiv2bib`](https://github.com/nathangrigg/arxiv2bib) and [`mr2bib`](https://github.com/bibgetter/mr2bib) first. For `arxiv2bib` this is [explained in their documentation](https://github.com/nathangrigg/arxiv2bib#installation).
+* `bibgetter add` adds entries to the central file in an automated way
 
-To install `mr2bib`, clone the repository and run `python setup.py install`.
+One can add entries to this file in the following ways:
 
-Then to install `bibgetter`, clone this repository and run `python setup.py install`.
+1) by hand (and indeed, the whole point is that you curate a single file, once)
+2) by specifying arXiv or MathSciNet id's
+3) by specifying an .aux file (or files), scanning for bibliography keys being used
+
+An example of the second option:
+
+`bibgetter fetch 2411.14814 2410.07620 MR1234567`
+
+An example of the third option:
+
+`bibgetter fetch --file article.aux`
+
+If an entry is missing, it will make an API call.
+
+### Transferring entries
+
+* `bibgetter sync` transfers entries from the central file to a local file
+
+It takes as input a list of entries that should exist in the local file, but maybe don't.
+It then looks for these in the central file, and if present, copies them to the local file.
+It will not overwrite existing entries.
+
+The anticipated use case is the following:
+
+`bibgetter sync --file article.aux --local bibliography.bib`
+
+This option is guaranteed to work offline.
+
+### Both at once
+
+* `bibgetter pull` is the combination of `bibgetter add` and `bibgetter sync`
+
+So most likely you want to have something like
+
+`bibgetter pull --file article.aux --local bibliography.bib`
+
+in your toolchain.
